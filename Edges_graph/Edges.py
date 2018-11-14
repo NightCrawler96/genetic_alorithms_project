@@ -355,3 +355,75 @@ def create_edges_for_accident_X6_Y5(G, weather):
 
     G.add_edge('X7', 'X6', weight=accid)
     G.add_edge('X7', 'Y6', weight=accid)
+
+def create_path_for_accident_B8_C7():
+    list_path = []
+
+    tupla1 = 'B7', 'B8'
+    tupla2 = 'B7', 'C7'
+    tupla3 = 'B7', 'C8'
+    tupla4 = 'C7', 'C8'
+    tupla5 = 'B8', 'C7'
+    tupla6 = 'B8', 'C8'
+    list_path.append(tupla1)
+    list_path.append(tupla2)
+    list_path.append(tupla3)
+    list_path.append(tupla4)
+    list_path.append(tupla5)
+    list_path.append(tupla6)
+
+    return list_path
+
+def create_path_for_accident_D2_E1():
+    list_path = []
+
+    tupla1 = 'D1', 'D2'
+    tupla2 = 'D1', 'E1'
+    tupla3 = 'D1', 'E2'
+    tupla4 = 'E1', 'E2'
+    tupla5 = 'D2', 'E2'
+    tupla6 = 'D2', 'E1'
+    list_path.append(tupla1)
+    list_path.append(tupla2)
+    list_path.append(tupla3)
+    list_path.append(tupla4)
+    list_path.append(tupla5)
+    list_path.append(tupla6)
+
+    return list_path
+
+def create_path_for_accident_O8_P7():
+    list_path = []
+
+    tupla1 = 'O7', 'O8'
+    tupla2 = 'O7', 'P7'
+    tupla3 = 'O7', 'P8'
+    tupla4 = 'P7', 'P8'
+    tupla5 = 'O8', 'P7'
+    tupla6 = 'O8', 'P8'
+    list_path.append(tupla1)
+    list_path.append(tupla2)
+    list_path.append(tupla3)
+    list_path.append(tupla4)
+    list_path.append(tupla5)
+    list_path.append(tupla6)
+
+    return list_path
+
+def create_path_for_accident_X6_Y5():
+    list_path = []
+
+    tupla1 = 'X5', 'X6'
+    tupla2 = 'X5', 'Y6'
+    tupla3 = 'X5', 'Y5'
+    tupla4 = 'Y5', 'Y6'
+    tupla5 = 'X6', 'Y6'
+    tupla6 = 'X6', 'Y5'
+    list_path.append(tupla1)
+    list_path.append(tupla2)
+    list_path.append(tupla3)
+    list_path.append(tupla4)
+    list_path.append(tupla5)
+    list_path.append(tupla6)
+
+    return list_path

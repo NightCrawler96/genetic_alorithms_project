@@ -2,41 +2,28 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from scipy.misc import imread
 
-import Edges_graph.Edges as Edges_file
+import Big_graph.Edges_graph.Edges as Edges_file
 
 
 class Graph:
     def __init__(self, sphere, weather):
-        self.G_to_draw = nx.Graph()
-        self.G_to_find_a_path = nx.grid_graph(dim=[10, 25])
+        self.G = nx.Graph()
         self.letters = self.crate_list_of_letters()
         self.dict_nodes_with_pos = self.create_graph_nodes_and_dict_nodes_with_pos()
-        self.create_graph_edges(self.G_to_draw, sphere, weather)
-        self.create_graph_edges(self.G_to_find_a_path, sphere, weather)
-        self.pos = nx.get_node_attributes(self.G_to_draw, 'pos')
-        self.draw_graph()
-
+        self.path_accident = self.create_graph_edges(self.G, sphere, weather)
+        self.pos = nx.get_node_attributes(self.G, 'pos')
 
 #############################################################################
 
-    def draw_graph(self):
-        nx.draw_networkx_nodes(self.G_to_draw, self.pos)
-        nx.draw_networkx_edges(self.G_to_draw, self.pos, edgelist=self.G_to_draw.edges)
-        nx.draw_networkx_labels(self.G_to_draw, self.pos)
-
-        datafile = 'Wallpapers/Background.png'
-        img = imread(datafile)
-        plt.imshow(img, zorder=0, extent=[-1.0, 25.0, -1.0, 10.0])
-        plt.savefig("Images/graph.png")
-        plt.show()
-
     def draw_way_dijktra(self, ways_to_draw):
-        edges_with_delete_ways_to_draw = self.G_to_draw.edges - ways_to_draw
+        edges_with_delete_ways_to_draw = self.G.edges - ways_to_draw
+        edges_with_delete_ways_to_draw = edges_with_delete_ways_to_draw - set(self.path_accident)
 
-        nx.draw_networkx_nodes(self.G_to_draw, self.pos)
-        nx.draw_networkx_edges(self.G_to_draw, self.pos, edgelist=edges_with_delete_ways_to_draw)
-        nx.draw_networkx_edges(self.G_to_draw, self.pos, edgelist=ways_to_draw, alpha=1, edge_color='b', style='dashed')
-        nx.draw_networkx_labels(self.G_to_draw, self.pos)
+        nx.draw_networkx_nodes(self.G, self.pos)
+        nx.draw_networkx_edges(self.G, self.pos, edgelist=edges_with_delete_ways_to_draw)
+        nx.draw_networkx_edges(self.G, self.pos, edgelist=ways_to_draw, alpha=1, edge_color='b', style='dashed')
+        nx.draw_networkx_edges(self.G, self.pos, edgelist=self.path_accident, alpha=1, edge_color='r', style='dashed')
+        nx.draw_networkx_labels(self.G, self.pos)
 
         datafile = 'Wallpapers/Background.png'
         img = imread(datafile)
@@ -45,12 +32,14 @@ class Graph:
         plt.show()
 
     def draw_way_a_star(self, ways_to_draw):
-        edges_with_delete_ways_to_draw = self.G_to_draw.edges - ways_to_draw
+        edges_with_delete_ways_to_draw = self.G.edges - ways_to_draw
+        edges_with_delete_ways_to_draw = edges_with_delete_ways_to_draw - set(self.path_accident)
 
-        nx.draw_networkx_nodes(self.G_to_draw, self.pos)
-        nx.draw_networkx_edges(self.G_to_draw, self.pos, edgelist=edges_with_delete_ways_to_draw)
-        nx.draw_networkx_edges(self.G_to_draw, self.pos, edgelist=ways_to_draw, alpha=1, edge_color='b', style='dashed')
-        nx.draw_networkx_labels(self.G_to_draw, self.pos)
+        nx.draw_networkx_nodes(self.G, self.pos)
+        nx.draw_networkx_edges(self.G, self.pos, edgelist=edges_with_delete_ways_to_draw)
+        nx.draw_networkx_edges(self.G, self.pos, edgelist=ways_to_draw, alpha=1, edge_color='b', style='dashed')
+        nx.draw_networkx_edges(self.G, self.pos, edgelist=self.path_accident, alpha=1, edge_color='r', style='dashed')
+        nx.draw_networkx_labels(self.G, self.pos)
 
         datafile = 'Wallpapers/Background.png'
         img = imread(datafile)
@@ -74,8 +63,7 @@ class Graph:
                 name_node = letter + str(number)
                 values_of_pos = os_x, number
 
-                self.G_to_draw.add_node(name_node, pos=(os_x, number))
-                self.G_to_find_a_path.add_node(name_node, pos=(os_x, number))
+                self.G.add_node(name_node, pos=(os_x, number))
 
                 list_of_keys_dict.append(name_node)
                 list_of_values_dict.append(values_of_pos)
@@ -114,14 +102,21 @@ class Graph:
         Edges_file.create_edges_for_mountain_left(G, weight_mountain)
         Edges_file.create_edges_for_mountain_right(G, weight_mountain)
 
-        if weather == 1 or weather == 2:
+        path_accident = []
+
+        if weather != 0:
             if sphere == 0:
                 Edges_file.create_edges_for_accident_B8_C7(G, weather)
+                path_accident = Edges_file.create_path_for_accident_B8_C7()
             elif sphere == 1:
                 Edges_file.create_edges_for_accident_D2_E1(G, weather)
+                path_accident = Edges_file.create_path_for_accident_D2_E1()
             elif sphere == 2:
                 Edges_file.create_edges_for_accident_O8_P7(G, weather)
+                path_accident = Edges_file.create_path_for_accident_O8_P7()
             elif sphere == 3:
                 Edges_file.create_edges_for_accident_X6_Y5(G, weather)
+                path_accident = Edges_file.create_path_for_accident_X6_Y5()
             else:
                 print('You are over size of random sphere')
+        return path_accident

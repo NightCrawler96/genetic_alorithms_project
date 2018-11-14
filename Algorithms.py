@@ -2,24 +2,25 @@ from collections import defaultdict
 import random
 from heapq import *
 
-import Edges_dijkstra.Edges_normal as Edges_normal
-import Edges_dijkstra.Edges_B8_C7 as Edges_B8_C7
-import Edges_dijkstra.Edges_D2_E1 as Edges_D2_E1
-import Edges_dijkstra.Edges_O8_P7 as Edges_O8_P7
-import Edges_dijkstra.Edges_X6_Y5 as Edges_X6_Y5
+import Big_graph.Edges_dijkstra.Edges_normal as Edges_normal
+import Big_graph.Edges_dijkstra.Edges_B8_C7 as Edges_B8_C7
+import Big_graph.Edges_dijkstra.Edges_D2_E1 as Edges_D2_E1
+import Big_graph.Edges_dijkstra.Edges_O8_P7 as Edges_O8_P7
+import Big_graph.Edges_dijkstra.Edges_X6_Y5 as Edges_X6_Y5
 
 
 class Algorithms:
     def __init__(self):
         self.weather = self.rand_weather()
         self.sphere = self.rand_sphere(self.weather)
+        self.dict_nodes_with_pos = self.create_graph_nodes_and_dict_nodes_with_pos()
         self.start_input_point = self.read_start_point()
         self.end_input_point = self.read_end_point()
         self.edges_dijstra = self.create_edges_dijkstra(self.sphere, self.weather)
         self.path_to_unpack_dijkstra = self.dijkstra(self.edges_dijstra, self.start_input_point, self.end_input_point)
         self.length_of_way_dijkstra = self.path_to_unpack_dijkstra[0]
         self.path_dijkstra_to_print = self.create_good_path(self.path_to_unpack_dijkstra[1])
-        self.path_to_draw_dijktra = self.create_path_to_draw_dijkstra(self.path_dijkstra_to_print)
+        self.path_to_draw_dijktra = self.create_path_to_draw(self.path_dijkstra_to_print)
 
 
 #############################################################################
@@ -68,7 +69,7 @@ class Algorithms:
 
         return ways_dijktra_good_order
 
-    def create_path_to_draw_dijkstra(self, data):
+    def create_path_to_draw(self, data):
         ways_to_draw = []
         for i in range(len(data)):
             if i != len(data) - 1:
@@ -102,28 +103,29 @@ class Algorithms:
 
         return float("inf")
 
-    def change_path_a_star_from_coordinates_to_letters(self, path_with_number, nodes, dict_data):
-        list_of_letters_of_path_a_star = []
+    def create_graph_nodes_and_dict_nodes_with_pos(self):
+        data = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+                'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+                'Q', 'R', 'S', 'T', 'U', 'W', 'X', 'Y', 'Z']
 
-        for i in path_with_number:
-            for nod in nodes:
-                if i == dict_data[nod]:
-                    list_of_letters_of_path_a_star.append(nod)
+        list_of_keys_dict = []
+        list_of_values_dict = []
+        os_x = 0
+        for letter in data:
+            for number in range(0, 10):
+                name_node = letter + str(number)
+                values_of_pos = os_x, number
+                list_of_keys_dict.append(name_node)
+                list_of_values_dict.append(values_of_pos)
+            os_x += 1
 
-        return list_of_letters_of_path_a_star
+        data = dict(zip(list_of_keys_dict, list_of_values_dict))
 
-    def create_path_to_draw_a_star(self, letters):
-        ways_to_draw = []
-        for i in range(len(letters)):
-            if i != len(letters) - 1:
-                tupla = letters[i], letters[i + 1]
-                ways_to_draw.append(tupla)
-
-        return ways_to_draw
+        return data
 
     def distance(self, a, b):
-        (x1, y1) = a
-        (x2, y2) = b
+        (x1, y1) = self.dict_nodes_with_pos[a]
+        (x2, y2) = self.dict_nodes_with_pos[b]
 
         return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
 
