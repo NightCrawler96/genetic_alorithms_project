@@ -13,7 +13,8 @@ def random_connection(start_node, target_node, graph_eges, p=0.001, d=1):
     :param d: Multiplies probability of choosing node being the closest one to the target
     :return: List of nodes representing connection and its cost
     '''
-
+    start_node = start_node.capitalize()
+    target_node = target_node.capitalize()
     edges_array = np.array(graph_eges)
     current_node = start_node
     target_coordinates = helper_functions.change2coordinates(target_node)
