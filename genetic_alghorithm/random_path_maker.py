@@ -57,6 +57,5 @@ def random_connection(start_node, target_node, graph_eges, p=0.001, d=1):
         current_node = next_node
         chosen_edge = current_edges[current_edges[:, 1] == current_node].T
         connection_cost += float(chosen_edge[2])
-        print(next_node)
 
     return path, connection_cost
