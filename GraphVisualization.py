@@ -2,7 +2,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from scipy.misc import imread
 
-import Big_graph.Edges_graph.Edges as Edges_file
+import Edges_graph.Edges as Edges_file
 
 
 class Graph:

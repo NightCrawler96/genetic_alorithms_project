@@ -2,11 +2,11 @@ from collections import defaultdict
 import random
 from heapq import *
 
-import Big_graph.Edges_dijkstra.Edges_normal as Edges_normal
-import Big_graph.Edges_dijkstra.Edges_B8_C7 as Edges_B8_C7
-import Big_graph.Edges_dijkstra.Edges_D2_E1 as Edges_D2_E1
-import Big_graph.Edges_dijkstra.Edges_O8_P7 as Edges_O8_P7
-import Big_graph.Edges_dijkstra.Edges_X6_Y5 as Edges_X6_Y5
+import Edges_dijkstra.Edges_normal as Edges_normal
+import Edges_dijkstra.Edges_B8_C7 as Edges_B8_C7
+import Edges_dijkstra.Edges_D2_E1 as Edges_D2_E1
+import Edges_dijkstra.Edges_O8_P7 as Edges_O8_P7
+import Edges_dijkstra.Edges_X6_Y5 as Edges_X6_Y5
 
 
 class Algorithms:
