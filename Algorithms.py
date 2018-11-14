@@ -90,7 +90,7 @@ class Algorithms:
                 seen.add(v1)
                 path = (v1, path)
                 if v1 == t:
-                    return (cost, path)
+                    return cost, path
 
                 for c, v2 in g.get(v1, ()):
                     if v2 in seen:
