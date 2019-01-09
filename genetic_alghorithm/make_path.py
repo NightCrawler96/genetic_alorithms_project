@@ -5,26 +5,32 @@ from genetic_alghorithm.crossings import crossing
 from genetic_alghorithm.mutations import mutation
 from Edges_dijkstra import Edges_normal
 
+cost_specimen = [('cost', float), ('specimen', list)]
+
 
 def make_population(start, finish, edges, specimen_num):
     _specimen = []
-    _rewards = []
+    _costs = []
     for _ in range(specimen_num):
         s, r = rpm.random_connection(start, finish, edges, d=.1)
-        _rewards.append(r)
+        _costs.append(r)
         _specimen.append(s)
 
-    return _specimen, _rewards
+    return _specimen, _costs
 
 
-def threshold(population, rewards, parents_prop=.5):
-    dtype = [('reward', float), ('specimen', list)]
-    t = int(len(population) * parents_prop)
+def combine(population, costs):
     pop = []
-    for p, r in zip(population, rewards):
+    for p, r in zip(population, costs):
         pop.append((r, p))
-    pop = np.array(pop, dtype=dtype)
-    pop.sort(order='reward')
+    pop = np.array(pop, dtype=cost_specimen)
+    return pop
+
+
+def threshold(population, costs, parents_prop=.5):
+    t = int(len(population) * parents_prop)
+    pop = combine(population, costs)
+    pop.sort(order='cost')
     parents = pop[:t]
 
     return parents
@@ -33,20 +39,20 @@ def threshold(population, rewards, parents_prop=.5):
 edges = Edges_normal.edges
 start = "a0"
 fin = "g9"
-pop_num = 10
+pop_num = 100
 iterations = 100
 select = .5
 pc = .9
-pm = .99
-population, rewards = make_population(start, fin, edges, pop_num)
+pm = .2
+population, costs = make_population(start, fin, edges, pop_num)
 
 
-def estimate_rewards(population):
+def estimate_costs(population):
     return np.random.uniform(0, 100, len(population))
 
 
 for _ in range(iterations):
-    parents = threshold(population, rewards)
+    parents = threshold(population, costs)
 
     pairs_num = int((len(population) * (1 - select)) / 2)
     kids = []
@@ -69,6 +75,14 @@ for _ in range(iterations):
             k0 = mutation(k1)
         kids.append(k0)
         kids.append(k1)
-    population = parents + kids
-    rewards = estimate_rewards(population)
+    population = [p[1] for p in parents] + kids
+    costs = estimate_costs(population)
 
+final_pop = combine(population, costs)
+final_pop.sort(order='cost')
+best_s = final_pop[0]
+best_path = best_s[1]
+best_cost = best_s[0]
+print("Best path:")
+print(best_path)
+print("cost: " + str(best_cost))

@@ -12,3 +12,8 @@ def change2coordinates(node):
     )
     y = float(node[1])
     return np.array([x, y])
+
+def change2name(x, y):
+    x_s = string.ascii_uppercase[int(x)]
+    y_s = str(int(y))
+    return x_s + y_s

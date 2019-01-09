@@ -1,14 +1,18 @@
 import numpy as np
 from genetic_alghorithm.random_path_maker import random_connection
+from genetic_alghorithm.helper_functions import change2coordinates
 
 
 def make_kid(left, right, cut, edges):
     beggining = left[:cut]
     end = right[cut:]
-    if beggining[-1] != end[0]:
+    last_of_beggining = change2coordinates(beggining[-1])
+    first_of_end = change2coordinates(end[0])
+    diff_distance = np.linalg.norm(first_of_end - last_of_beggining)
+    if diff_distance > 1.5:
         s, e = beggining[-1], end[0]
         conn, _ = random_connection(s, e, edges, d=10)
-        kid = beggining + conn[1:-2] + end
+        kid = beggining + conn[1:-1] + end
     else:
         kid = beggining + end
     return kid
