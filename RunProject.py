@@ -1,7 +1,7 @@
 import networkx as nx
 
-from Big_graph import Algorithms as Algorithms_file
-from Big_graph import GraphVisualization as Graph_file
+import Algorithms as Algorithms_file
+import GraphVisualization as Graph_file
 
 if __name__ == "__main__":
     algorithms_run = Algorithms_file.Algorithms()
