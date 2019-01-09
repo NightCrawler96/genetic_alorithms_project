@@ -10,7 +10,7 @@ def make_population(start, finish, edges, specimen_num):
     _specimen = []
     _rewards = []
     for _ in range(specimen_num):
-        s, r = rpm.random_connection(start, finish, edges)
+        s, r = rpm.random_connection(start, finish, edges, d=.1)
         _rewards.append(r)
         _specimen.append(s)
 
@@ -18,34 +18,26 @@ def make_population(start, finish, edges, specimen_num):
 
 
 def threshold(population, rewards, parents_prop=.5):
+    dtype = [('reward', float), ('specimen', list)]
     t = int(len(population) * parents_prop)
-    pop_dict = {}
+    pop = []
     for p, r in zip(population, rewards):
-        pop_dict[r] = p
-    rewards.sort()
-    best_rewards = rewards[:t]
-    probabilities = np.ones(len(best_rewards)) / len(best_rewards)
-    selections = np.random.uniform(0, 1, t)
-    parents = []
-    for sel_p in selections:
-        total_p = 0
-        for r, p in zip(best_rewards, probabilities):
-            total_p += p
-            if sel_p < total_p:
-                parents.append(pop_dict[r])
-                break
+        pop.append((r, p))
+    pop = np.array(pop, dtype=dtype)
+    pop.sort(order='reward')
+    parents = pop[:t]
 
     return parents
 
 
 edges = Edges_normal.edges
-start = "b0"
-fin = "f9"
-pop_num = 100
+start = "a0"
+fin = "g9"
+pop_num = 10
 iterations = 100
 select = .5
 pc = .9
-pm = .3
+pm = .99
 population, rewards = make_population(start, fin, edges, pop_num)
 
 
@@ -65,11 +57,11 @@ for _ in range(iterations):
     for p0, p1 in pairs:
         crosing_lottery = np.random.uniform(0, 1)
         if crosing_lottery < pc:
-            k0, k1 = crossing(p0, p1)
+            k0, k1 = crossing(p0, p1, edges)
         else:
-            k0, k1 = p0, p1
+            k0, k1 = p0[1], p1[1]
 
-        mutation_lottery = np.random.uniform(0, 2)
+        mutation_lottery = np.random.uniform(0, 1, 2)
 
         if mutation_lottery[0] < pm:
             k0 = mutation(k0)
