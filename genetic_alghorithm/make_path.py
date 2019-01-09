@@ -37,8 +37,8 @@ def threshold(population, costs, parents_prop=.5):
 
 
 edges = Edges_normal.edges
-start = "a0"
-fin = "g9"
+start = 'a0'
+fin = 'l8'
 pop_num = 100
 iterations = 100
 select = .5
@@ -48,7 +48,22 @@ population, costs = make_population(start, fin, edges, pop_num)
 
 
 def estimate_costs(population):
-    return np.random.uniform(0, 100, len(population))
+    cost = 0
+    list_of_costs = []
+
+    for path in population:
+        for i in range(len(path)):
+            if i < len(path) - 1:
+                for j in range(len(Edges_normal.edges)):
+                    if path[i] == Edges_normal.edges[j][0] and path[i+1] == Edges_normal.edges[j][1]:
+                        value = Edges_normal.edges[j][2]
+                        cost += value
+        list_of_costs.append(cost)
+        cost = 0
+
+    rewards = np.array([i for i in list_of_costs])
+
+    return rewards
 
 
 for _ in range(iterations):
@@ -80,9 +95,16 @@ for _ in range(iterations):
 
 final_pop = combine(population, costs)
 final_pop.sort(order='cost')
+
+print(final_pop)
+
 best_s = final_pop[0]
 best_path = best_s[1]
 best_cost = best_s[0]
+
+# print(best_s[1])
+
 print("Best path:")
 print(best_path)
 print("cost: " + str(best_cost))
+
